@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant </title>
+    
+    <!-- Google Fonts for a clean and modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif; /* Keeping it simple */
+        }
+
+        body {
+            background: #f8f9fa;
+            line-height: 1.6; /* Slight tweak for better readability */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            background: white;
+            padding: 18px 0; /* Slightly changed padding */
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold; /* A minor tweak for emphasis */
+            color: #2d3436;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 80px 20px; /* Added padding for smaller screens */
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 40px; /* Reduced a little for better scaling */
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #636e72;
+            font-size: 17px; /* Made it slightly smaller */
+            margin-bottom: 35px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #6c5ce7, #a363d9);
+            color: white;
+            padding: 14px 38px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            transition: all 0.3s;
+            box-shadow: 0px 4px 10px rgba(108, 92, 231, 0.3); /* Added slight shadow */
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            opacity: 0.9;
+        }
+
+        /* --- Features Section --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for better responsiveness */
+            gap: 30px;
+            padding: 60px 10px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 28px;
+            border-radius: 18px; /* Made border radius a bit more subtle */
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .feature-number {
+            font-size: 38px; /* Adjusted slightly */
+            color: #6c5ce7;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: #636e72;
+            line-height: 1.5;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        ul{
+            display: flex;
+            list-style: none;
+        }
+        ul li a{
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        ul li a:hover{
+            color: #9f33da;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">LUMOUS AI</div>
+            <ul>
+                <li>
+                    <a href="#features">Features</a>
+                    <a href="">About</a>
+                    <a href="">why</a>
+                    <a href="">what</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>AI Assistant Mobile App<br>UI Kit</h1>
+            <p>Beautifully crafted modern UI components for AI assistant applications</p>
+            <a href="again.html" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-number">45+</div>
+                <h3 class="feature-title">Modern Screens</h3>
+                <p class="feature-description">Beautifully crafted clean & modern screens for AI applications</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-number">100%</div>
+                <h3 class="feature-title">Customizable</h3>
+                <p class="feature-description">Easily customizable components with detailed documentation</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-number">48+</div>
+                <h3 class="feature-title">Design Elements</h3>
+                <p class="feature-description">Vector-based components with pixel-perfect measurements</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-number">46+</div>
+                <h3 class="feature-title">UI Components</h3>
+                <p class="feature-description">Modern UI components designed for optimal user experience</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-number">Free</div>
+                <h3 class="feature-title">Google Fonts</h3>
+                <p class="feature-description">Includes free premium fonts and typography system</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-number">💎</div>
+                <h3 class="feature-title">Design System</h3>
+                <p class="feature-description">Complete design system with style guides and assets</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetSection = document.querySelector(this.getAttribute('href'));
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Adding fade-in animation on scroll
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // Apply animation to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

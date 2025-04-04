@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <style>
+        :root {
+            --primary-color: #191e25;
+            --secondary-color: #ffffff;
+            --bg-color: #f0f4f9;
+            --accent-color: #6c5ce7;
+            --text-dark: #2d3436;
+            --text-medium: #636e72;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            height: 100vh;
+        }
+
+        .chat-container {
+            /* max-width: 1200px; */
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 1rem 2rem;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background: var(--bg-color);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1.2rem;
+            border-radius: 15px;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .user-message {
+            background-color: var(--secondary-color);
+            color: rgb(35, 32, 32);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            flex-direction: row-reverse;
+        }
+
+        .ai-message {
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-bottom-left-radius: 4px;
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bot-avatar img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        .message-content {
+            flex: 1;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .input-container {
+            padding: 1.5rem 2rem;
+            background-color: var(--secondary-color);
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+        }
+
+        #sendBtn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #sendBtn:hover {
+            transform: translateY(-2px);
+        }
+
+        .model-selector select {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loading animation */
+        .typing-animation {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 40px;
+        }
+
+        .typing-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { left: 0; animation-delay: 0s; }
+        .typing-dot:nth-child(2) { left: 20px; animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { left: 40px; animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .message {
+                max-width: 90%;
+            }
+            
+            .chat-header {
+                padding: 1rem;
+            }
+            
+            .input-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h2>TripPlanner AI</h2>
+            <div class="model-selector">
+                <select id="modelSelect">
+                    <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
+                    <option value="meta-llama/llama-2-13b-chat">LLaMA 2 13B</option>
+                    <option value="gryphe/mythomax-l2-13b">MythoMax 13B</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="chat-history" id="chatHistory">
+            <div class="message ai-message">
+                <div class="bot-avatar">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Assistant">
+                </div>
+                <div class="message-content">
+                    Hello! I'm AI Assistant to help you with your packing.
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <textarea id="messageInput" placeholder="Type your question here..."></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+        async function sendMessage() {
+            const inputField = document.getElementById('messageInput');
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            inputField.value = '';
+            
+            // Add loading animation
+            const loadingMsg = addLoadingMessage();
+
+            try {
+                const response = await getAIResponse(message);
+                replaceLoadingMessage(loadingMsg, response, 'ai');
+            } catch (error) {
+                replaceLoadingMessage(loadingMsg, `Error: ${error.message}`, 'ai');
+            }
+        }
+
+        function addMessage(content, sender) {
+            const history = document.getElementById('chatHistory');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            if(sender === 'ai') {
+                messageDiv.innerHTML = `
+                    <div class="bot-avatar">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Assistant">
+                    </div>
+                    <div class="message-content">${content}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+            }
+            
+            history.appendChild(messageDiv);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function addLoadingMessage() {
+            const history = document.getElementById('chatHistory');
+            const loader = document.createElement('div');
+            loader.className = 'message ai-message';
+            loader.innerHTML = `
+                <div class="bot-avatar">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Assistant">
+                </div>
+                <div class="typing-animation">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            history.appendChild(loader);
+            history.scrollTop = history.scrollHeight;
+            return loader;
+        }
+
+        function replaceLoadingMessage(loaderElement, content, sender) {
+            const formattedContent = formatResponse(content);
+            loaderElement.className = `message ${sender}-message`;
+            loaderElement.innerHTML = `
+                <div class="bot-avatar">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Assistant">
+                </div>
+                <div class="message-content">${formattedContent}</div>
+            `;
+        }
+
+        function formatResponse(responseText) {
+            return responseText
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function getAIResponse(prompt) {
+            const model = document.getElementById('modelSelect').value;
+            const response = await fetch(OPENROUTER_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'HTTP-Referer': window.location.href,
+                    'X-Title': 'Study Assistant'
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: [{
+                        role: "system",
+                        content: "Format answers with markdown: use **bold**, *italic*, `code`, ```code blocks```, and lists"
+                    }, {
+                        role: "user",
+                        content: prompt
+                    }]
+                })
+            });
+
+            if (!response.ok) throw new Error('Failed to get response');
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        // Handle Enter key for sending messages
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
